@@ -106,7 +106,7 @@ class AirportChart(Chart):
 
 
 @dataclass
-class GroundChart(Chart):
+class GroundChart(AirportChart):
     """
     Represents a generic ground chart for a given airport, this includes parking
     and taxiing
