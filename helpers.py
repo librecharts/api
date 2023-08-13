@@ -10,10 +10,10 @@
 
 from dataclasses import dataclass
 from typing import Union, Optional
+from pydantic import BaseModel
 
 
-@dataclass
-class Source:
+class Source(BaseModel):
     """
     Represents a Source for a given chart
 
@@ -25,7 +25,7 @@ class Source:
     url: str
         URL for the given source
     contributor: str
-        Github profile name for the contributor
+        GitHub profile name for the contributor
     cached: bool
         If LibreCharts caches the charts, or they're served directly
 
@@ -38,7 +38,7 @@ class Source:
 
 
 @dataclass
-class Chart:
+class Chart(BaseModel):
     """
     Represents a generic chart
 
