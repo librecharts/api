@@ -52,7 +52,7 @@ class Chart(BaseModel):
         Mime-type of the chart file (will usually be application/pdf)
     """
 
-    chart_type: str
+    type: str
     filename: str
     filetype: str
     source: Source
