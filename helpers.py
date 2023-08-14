@@ -55,22 +55,7 @@ class Chart(BaseModel):
     chart_type: str
     filename: str
     filetype: str
-    __raw_source: dict[str, Union[str, bool]]
-
-    @property
-    def source(self) -> Optional[Source]:
-        """
-        Returns the source object for the given chart
-
-        Returns
-        -------
-        Source
-
-        """
-        try:
-            return Source(**self.__raw_source)
-        except TypeError:
-            return None
+    source: Source
 
 
 class AirspaceChart(Chart):
