@@ -37,7 +37,6 @@ class Source(BaseModel):
     cached: bool = True
 
 
-@dataclass
 class Chart(BaseModel):
     """
     Represents a generic chart
@@ -74,7 +73,6 @@ class Chart(BaseModel):
             return None
 
 
-@dataclass
 class AirspaceChart(Chart):
     """
     Represents a chart for a given FIR
@@ -90,7 +88,6 @@ class AirspaceChart(Chart):
     subtype: str
 
 
-@dataclass
 class AirportChart(Chart):
     """
     Represents a generic chart for a given airport
@@ -105,7 +102,6 @@ class AirportChart(Chart):
     icao_code: str
 
 
-@dataclass
 class GroundChart(AirportChart):
     """
     Represents a generic ground chart for a given airport, this includes parking
@@ -121,7 +117,6 @@ class GroundChart(AirportChart):
     subtype: Optional[str]
 
 
-@dataclass
 class RunwayChart(AirportChart):
     """
     Represents a generic chart for a given runway
@@ -136,7 +131,6 @@ class RunwayChart(AirportChart):
     runway: Union[str, list[str]]
 
 
-@dataclass
 class ApproachChart(RunwayChart):
     """
     Represents an approach chart for a given runway
@@ -159,7 +153,6 @@ class ILSChart(ApproachChart):
     categories: list[str] = None
 
 
-@dataclass
 class DepartureChart(RunwayChart):
     """
     Represents a departure chart for a given runway
@@ -171,7 +164,6 @@ class DepartureChart(RunwayChart):
     stars: list[str] = None
 
 
-@dataclass
 class ArrivalChart(RunwayChart):
     """
     Represents a departure chart for a given runway
