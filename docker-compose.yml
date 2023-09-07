@@ -27,6 +27,11 @@ services:
       POSTGRES_DB: "librecharts"
       POSTGRES_HOST: "database"
       POSTGRES_PORT: "5432"
+    networks:
+      librecharts:
+        aliases:
+          - "database"
+
 
 volumes:
   postgresql-data:
