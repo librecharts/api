@@ -8,21 +8,26 @@
 # By downloading, executing or otherwise transferring the contents of this repository by any means you are legally
 # bound to the terms stipulated in the license.
 
-from typing import Union
+from typing import Union, Any
 
-from helpers import (
+from helpers.classes import (
     Chart,
-    AirspaceChart,
-    ILSChart,
     DepartureChart,
     ApproachChart,
-    ArrivalChart, AirportChart,
+    ArrivalChart,
+    GroundChart,
 )
 
 
+def __create_kwargs(tuple_: tuple[Union[str, dict[str, str], list[str]]]) -> dict[str, Any]:
+    keys = ['title', 'type', 'filename', 'filetype', 'source', 'icao_code', 'subtype', 'runways', 'sids', 'stars']
+    assert len(keys) == len(tuple_)
+    return {key: value for key, value in zip(keys, tuple_)}
+
+
 def chart_factory(
-    content: dict[str, Union[str, bool]]
-) -> Union[Chart, AirspaceChart, ApproachChart, ILSChart, DepartureChart, ArrivalChart, AirportChart]:
+        content: Union[dict[str, Union[str, bool, list[str], dict[str]]], tuple[Union[str, dict[str, str], list[str]]]]
+) -> Union[Chart, ApproachChart, DepartureChart, ArrivalChart]:
     """
     Takes a properly formatted chart manifest and converts it to the proper python object
 
@@ -32,20 +37,13 @@ def chart_factory(
         Chart information from the manifest
     """
 
+    if isinstance(content, tuple):
+        content = __create_kwargs(content)
+
     match content["type"]:
+
         case "approach":
-
-            def __check_ils_approach(subtype: Union[str, list[str]]) -> bool:
-                if isinstance(subtype, list):
-                    return "ils" in [i.lower() for i in subtype]
-                else:
-                    return subtype.lower() == "ils"
-
-            if __check_ils_approach(content["subtype"]):
-                return ILSChart(**content)
-
-            else:
-                return ApproachChart(**content)
+            return ApproachChart(**content)
 
         case "departure":
 
@@ -55,10 +53,10 @@ def chart_factory(
 
             return ArrivalChart(**content)
 
-        case "airspace":
+        case "ground":
 
-            return AirspaceChart(**content)
+            return GroundChart(**content)
 
-        case "visual":
+        case _:
 
-            return AirportChart(**content)
+            return Chart(**content)

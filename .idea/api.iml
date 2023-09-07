@@ -7,12 +7,13 @@
     <orderEntry type="jdk" jdkName="Python 3.11 (api)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="charts" />
+    <orderEntry type="module" module-name="cache" />
   </component>
   <component name="PackageRequirementsSettings">
     <option name="requirementsPath" value="" />
   </component>
   <component name="PyDocumentationSettings">
-    <option name="format" value="NUMPY" />
-    <option name="myDocStringFormat" value="NumPy" />
+    <option name="format" value="GOOGLE" />
+    <option name="myDocStringFormat" value="Google" />
   </component>
 </module>

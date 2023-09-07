@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  api:
+    build: .
+    restart: always
+    environment:
+      DATABASE_URL: "postgresql://librecharts:${PASSWORD}@database:5432/librecharts"
+      UPDATE_TOKEN: ${UPDATE_TOKEN}
+    ports:
+     - "8080:8080"
+    depends_on:
+      - database
+
+
+  database:
+    image: postgres:alpine
+    restart: always
+    volumes:
+      - postgresql-data:/var/lib/db/data
+    environment:
+      POSTGRES_USER: "librecharts"
+      POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_DB: "librecharts"
+      POSTGRES_HOST: "database"
+      POSTGRES_PORT: "5432"
+
+volumes:
+  postgresql-data:
