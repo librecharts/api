@@ -1,23 +1,33 @@
+from functools import lru_cache
 from typing import Annotated, Optional
 from starlette.middleware.cors import CORSMiddleware
+
+import config
 from helpers.classes import AnyChart, CoverageStatistics, Manifest
 from helpers.coverage import get_vatsim_statistics, get_stp_statistics, get_poscon_statistics
 from helpers.database import pool, __initialize_database, get_charts_by_icao_code, get_icao_codes, \
     insert_or_update_chart, delete_charts_with_icao_code
-from fastapi import FastAPI, Path, HTTPException, Header
+from fastapi import FastAPI, Path, HTTPException, Header, Depends
 from helpers.docs import CHARTS_INFORMATION, ICAO_CODE_CONSTRAINTS, CATEGORIZED_CHARTS_INFORMATION, CODES_INFORMATION, \
     COVERAGE_INFORMATION
-import os
 
-api = FastAPI()
+api = FastAPI(
+    redoc_url='/',
+    docs_url=None
+)
 
 api.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["GET", "POST"],
     allow_headers=["Token"],
 )
+
+
+@lru_cache()
+def get_settings():
+    return config.Settings()
 
 
 @api.get("/charts/{code}", **CHARTS_INFORMATION)
@@ -49,10 +59,10 @@ async def categorized_charts_per_code(
 
 
 @api.post("/update")
-async def update_charts(manifest: Manifest, token: Annotated[str | None, Header()] = None) -> Optional[dict[str, set[str]]]:
+async def update_charts(manifest: Manifest, settings: Annotated[config.Settings, Depends(get_settings)],
+                        token: Annotated[str | None, Header()] = None) -> Optional[dict[str, set[str]]]:
     if token:
-        print(os.getenv('UPDATE_TOKEN'))
-        if token == os.getenv('UPDATE_TOKEN'):
+        if token == settings.update_token:
             icao_codes = set([chart.icao_code for chart in manifest.charts])
             system_icao_codes = await get_icao_codes()
             for code in system_icao_codes.intersection(icao_codes):
