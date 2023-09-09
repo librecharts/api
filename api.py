@@ -1,3 +1,4 @@
+import os
 from functools import lru_cache
 from typing import Annotated, Optional
 from starlette.middleware.cors import CORSMiddleware
@@ -26,7 +27,7 @@ api.add_middleware(
 )
 
 sentry_sdk.init(
-    dsn="https://58ecdeb1de95e34e5a3cbc09fb8e8c3e@o4505838096744448.ingest.sentry.io/4505851361296384",
+    dsn=os.getenv('SENTRY_URI'),
     traces_sample_rate=1.0,
     profiles_sample_rate=0.1,
 )
