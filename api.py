@@ -10,6 +10,7 @@ from helpers.database import pool, __initialize_database, get_charts_by_icao_cod
 from fastapi import FastAPI, Path, HTTPException, Header, Depends
 from helpers.docs import CHARTS_INFORMATION, ICAO_CODE_CONSTRAINTS, CATEGORIZED_CHARTS_INFORMATION, CODES_INFORMATION, \
     COVERAGE_INFORMATION
+import sentry_sdk
 
 api = FastAPI(
     redoc_url='/',
@@ -22,6 +23,12 @@ api.add_middleware(
     allow_credentials=False,
     allow_methods=["GET", "POST"],
     allow_headers=["Token"],
+)
+
+sentry_sdk.init(
+    dsn="https://58ecdeb1de95e34e5a3cbc09fb8e8c3e@o4505838096744448.ingest.sentry.io/4505851361296384",
+    traces_sample_rate=1.0,
+    profiles_sample_rate=0.1,
 )
 
 
