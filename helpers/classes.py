@@ -8,7 +8,7 @@ from enum import StrEnum
 # By downloading, executing or otherwise transferring the contents of this repository by any means you are legally
 # bound to the terms stipulated in the license.
 
-from typing import Union, Optional
+from typing import Union, Optional, Any
 from pydantic import BaseModel
 
 
@@ -133,4 +133,4 @@ AnyChart = Union[Chart, ApproachChart, DepartureChart, ArrivalChart, GroundChart
 
 
 class Manifest(BaseModel):
-    charts: list[AnyChart]
+    charts: list[dict[str, Any]]

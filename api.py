@@ -13,6 +13,8 @@ from helpers.docs import CHARTS_INFORMATION, ICAO_CODE_CONSTRAINTS, CATEGORIZED_
     COVERAGE_INFORMATION
 import sentry_sdk
 
+from helpers.factories import chart_factory
+
 api = FastAPI(
     redoc_url='/',
     docs_url=None
@@ -71,7 +73,8 @@ async def update_charts(manifest: Manifest, settings: Annotated[config.Settings,
                         token: Annotated[str | None, Header()] = None) -> Optional[dict[str, set[str]]]:
     if token:
         if token == settings.update_token:
-            icao_codes = set([chart.icao_code for chart in manifest.charts])
+            manifest_charts = [chart_factory(item) for item in manifest.charts]
+            icao_codes = set([chart.icao_code for chart in manifest_charts])
             system_icao_codes = await get_icao_codes()
             for code in system_icao_codes.intersection(icao_codes):
                 await delete_charts_with_icao_code(code)

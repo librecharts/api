@@ -1,5 +1,5 @@
 import random
-from typing import Optional, Union, Any
+from typing import Optional, Any
 
 from fastapi import requests, HTTPException
 import requests
