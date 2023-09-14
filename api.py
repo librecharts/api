@@ -78,7 +78,7 @@ async def update_charts(manifest: dict[str, list[dict[str, Any]]], settings: Ann
             system_icao_codes = await get_icao_codes()
             for code in system_icao_codes.intersection(icao_codes):
                 await delete_charts_with_icao_code(code)
-            for chart in manifest.charts:
+            for chart in manifest_charts:
                 await insert_or_update_chart(chart)
             return {'codes': icao_codes}
     raise HTTPException(401)
