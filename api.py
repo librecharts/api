@@ -1,6 +1,6 @@
 import os
 from functools import lru_cache
-from typing import Annotated, Optional
+from typing import Annotated, Optional, Any
 from starlette.middleware.cors import CORSMiddleware
 
 import config
@@ -69,11 +69,11 @@ async def categorized_charts_per_code(
 
 
 @api.post("/update")
-async def update_charts(manifest: Manifest, settings: Annotated[config.Settings, Depends(get_settings)],
+async def update_charts(manifest: dict[str, dict[str, Any]], settings: Annotated[config.Settings, Depends(get_settings)],
                         token: Annotated[str | None, Header()] = None) -> Optional[dict[str, set[str]]]:
     if token:
         if token == settings.update_token:
-            manifest_charts = [chart_factory(item) for item in manifest.charts]
+            manifest_charts = [chart_factory(item) for item in manifest.get('charts')]
             icao_codes = set([chart.icao_code for chart in manifest_charts])
             system_icao_codes = await get_icao_codes()
             for code in system_icao_codes.intersection(icao_codes):
