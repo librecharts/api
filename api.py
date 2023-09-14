@@ -69,7 +69,7 @@ async def categorized_charts_per_code(
 
 
 @api.post("/update")
-async def update_charts(manifest: dict[str, dict[str, Any]], settings: Annotated[config.Settings, Depends(get_settings)],
+async def update_charts(manifest: dict[str, list[dict[str, Any]]], settings: Annotated[config.Settings, Depends(get_settings)],
                         token: Annotated[str | None, Header()] = None) -> Optional[dict[str, set[str]]]:
     if token:
         if token == settings.update_token:
