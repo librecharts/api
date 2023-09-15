@@ -20,12 +20,11 @@ def database_function(func):
     """
 
     async def decorate(*args, **kwargs):
-        connection = await pool.getconn()
-        cursor = connection.cursor()
-        value = await func(cursor, *args, **kwargs)
-        await connection.commit()
-        await cursor.close()
-        await pool.putconn(connection)
+        async with pool.connection() as connection:
+            cursor = connection.cursor()
+            value = await func(cursor, *args, **kwargs)
+            await connection.commit()
+            await cursor.close()
         return value
 
     return decorate
